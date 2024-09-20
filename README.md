@@ -1,5 +1,48 @@
 # PHP Tech Assignment - CliqDigital :computer:
 
+This is my proposed solution for the PHP Tech Assignment.
+
+## Requirements
+
+  - Docker
+
+## Setup
+
+For the first time setup it's necessary to create a Docker .env file. The two variables used in it are required during the Docker build to change the user and group id of the user in the container to match the host user; this allows files created in the docker environment to be read and writen on the host (and vice-versa) without encountering file permission issues.
+
+```bash
+cat >> .env.docker << TEXT
+USER_ID=$(id -u)
+GROUP_ID=$(id -g)
+TEXT
+```
+
+The image can then be built using
+
+```bash
+docker compose --env-file .env.docker build
+```
+
+## Usage
+
+Start the development env. The Docker container will listen on port 80: [http://localhost](http://localhost)
+```
+docker compose up
+```
+
+Install/update dependencies by running the command from the outside
+```
+docker compose exec -u www-data handler composer install
+```
+
+Alternatively a bash shell can be opened on the guest to do the same and anything else
+```
+docker compose exec -u www-data handler bash
+composer install
+```
+
+==================================
+
 Welcome to the PHP Tech Assignment! For this task, you'll be continuing the implementation of a webhook handler responsible for processing payment webhook notifications from three different fake payment gateways: `NIRVANA`, `RHCP`, and `SOAD`.
 
 Your mission, should you choose to accept it, is to develop a report feature. Each of these gateways provides the necessary data, but they do so in different formats and with different attributes. :wink:

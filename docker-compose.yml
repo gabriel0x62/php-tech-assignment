@@ -1,0 +1,14 @@
+name: cliq
+
+services:
+  handler:
+    build: 
+      dockerfile: Dockerfile
+      args:
+        - USER_ID=${USER_ID}
+        - GROUP_ID=${GROUP_ID}
+    command: php -S 0.0.0.0:80 -t /var/www/public/
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www:delegated

@@ -1,5 +1,5 @@
 {
-    "name": "cliq-bv/php-tech-assignment",
+    "name": "gabriel0x62/php-tech-assignment",
     "type": "project",
     "autoload": {
         "psr-4": {
@@ -10,6 +10,9 @@
         {
             "name": "Alisson de Padua",
             "email": "no-email@no-email.com"
+        },
+        {
+            "name": "Gabriel Bazdragan"
         }
     ],
     "require-dev": {
