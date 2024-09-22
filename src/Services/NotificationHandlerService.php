@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\BL\NotificationsReportGenerator;
 use App\Enums\GatewayEnum;
 use App\Enums\OutputTypeEnum;
 use App\Factories\GatewayNotificationFactory;
@@ -22,7 +23,8 @@ class NotificationHandlerService
         /** @var \App\DataObjects\GatewayNotification[] $notifications */
         $notifications = [];
 
-        $notificationFactory = new GatewayNotificationFactory(new SerializerFactory());
+        $serializerFactory = new SerializerFactory();
+        $notificationFactory = new GatewayNotificationFactory($serializerFactory);
         foreach (GatewayEnum::cases() as $gateway) {
             try {
                 $filePath = realpath("../payment-notifications/{$gateway->getFilename()}");
@@ -35,6 +37,11 @@ class NotificationHandlerService
             }
         }
 
-        // TODO
+        $reportContent = (new NotificationsReportGenerator(
+            $serializerFactory->getSerializer($this->outputType)
+        ))->generateReportContent($notifications);
+        
+        $filePath = implode(DIRECTORY_SEPARATOR, ['.', "output.{$this->outputType}"]);
+        file_put_contents($filePath, $reportContent);
     }
 }
