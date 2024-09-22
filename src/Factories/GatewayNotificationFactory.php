@@ -6,6 +6,8 @@ namespace App\Factories;
 
 use App\DataObjects\GatewayNotification;
 use App\DataObjects\NirvanaNotification;
+use App\DataObjects\RhcpNotification;
+use App\DataObjects\SoadNotification;
 use App\Enums\GatewayEnum;
 use App\Factories\Interfaces\IDeserializerFactory;
 use Exception;
@@ -25,9 +27,14 @@ class GatewayNotificationFactory
 
         switch ($gateway) {
             case GatewayEnum::NIRVANA:
-                $notification = new NirvanaNotification($data);
+                $notification = NirvanaNotification::createFromExternal($data);
                 break;
-
+            case GatewayEnum::RHCP:
+                $notification = RhcpNotification::createFromExternal($data);
+                break;
+            case GatewayEnum::SOAD:
+                $notification = SoadNotification::createFromExternal($data);
+                break;
             default:
                 throw new Exception("Unknown notification type");
         }

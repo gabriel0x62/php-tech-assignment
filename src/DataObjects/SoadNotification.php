@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace App\DataObjects;
 
-class NirvanaNotification extends GatewayNotification
+class SoadNotification extends GatewayNotification
 {
     public static function getFieldNameDateTime(): string
     {
-        return 'created_at';
+        return 'timestamp';
     }
 
     public static function getFieldNameStatus(): string
     {
-        return 'status';
+        return 'transaction_status';
     }
 
     public static function getFieldNameAmount(): string
     {
-        return 'amount_received';
+        return 'amount';
     }
 }
