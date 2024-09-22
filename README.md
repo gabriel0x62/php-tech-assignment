@@ -30,7 +30,7 @@ Start the development env. The Docker container will listen on port 80: [http://
 docker compose up
 ```
 
-Install/update dependencies by running the command from the outside
+Install/update dependencies by running the command from the host
 ```
 docker compose exec -u www-data handler composer install
 ```
@@ -41,80 +41,31 @@ docker compose exec -u www-data handler bash
 composer install
 ```
 
-==================================
+Code quality composer commands are available which can be run similarly to the `composer install` specification above. The integrated tools are PHPCodeSniffer (PSR12 coding standard), PHPMessDetector, PHPStan.
 
-Welcome to the PHP Tech Assignment! For this task, you'll be continuing the implementation of a webhook handler responsible for processing payment webhook notifications from three different fake payment gateways: `NIRVANA`, `RHCP`, and `SOAD`.
+```
+composer cs
+composer md
+composer stan
+```
 
-Your mission, should you choose to accept it, is to develop a report feature. Each of these gateways provides the necessary data, but they do so in different formats and with different attributes. :wink:
+Tests can be run using
+```
+composer test
+```
 
-## Goals
+## Notes
 
-- The idea is simple! You need to collect the notifications (3 gateways, 3 different files) from [this link](https://github.com/cliq-bv/php-tech-assignment/tree/main/payment-notifications), compile them into a single output file in the [public folder](https://github.com/cliq-bv/php-tech-assignment/tree/main/public), and make all the tests `GREEN`!
-  - This output file can be either `CSV` or `TXT` like `output.csv` and `output.txt` with 4 lines (1 header and 3 data lines).
-  
-- You can find [examples here](https://github.com/cliq-bv/php-tech-assignment/tree/main/tests/fixtures) of the exact files you need to generate. As mentioned, each notification file has its own properties, but the output has specific ones.
+- Was not sure of the main functionality required for the webhook, to collect the notifications as a webhook that would be called by external gateways or to generate the report periodically via some scheduler, so in `index.php` I implemented a very simple mechanism to save files POSTed to the webhook if running the solution in a server environment as above. The webhook requires better validation and error handling but since it didn't appear to be the main requirement I did not focus on this. The `NotificationHandlerService#handle` can still be verified using the tests or CLI logic or by uncommenting the code in `index.php`. Once the development server is running a file can be submitted via POST using curl:
 
-- To generate the output file, you need to extract only 3 properties from each notification file. Here's a matrix describing the fields you need to use:
+```
+curl -F rhcp=@payment-notifications/rhcp-gateway.xml http://localhost
+curl -F nirvana=@payment-notifications/nirvana-gateway.xml http://localhost
+```
 
-| Description            | Output File | Nirvana       | RHCP           | SOAD               |
-|------------------------|-------------|---------------|----------------|--------------------|
-| Transaction datetime   | date_time   | created_at    | created        | timestamp          |
-| Transaction status     | status      | status        | charge_status  | transaction_status |
-| Transaction amount     | total       | amount_received | total_amount   | amount             |
+- In order to not overengineer and to watch time the `NotificationHandlerService#handle` was left with hard class dependencies. In orther to achieve better decoupling and better testing support the main dependencies could be injected via the constructor later on. The `NotificationHandlerService#handle` method acts as a template method where the steps of the implementation come together. For potential reusability and scalability I chose to handle file read/writes in this method and encapsulate all other logic. `GatewayNotificationFactory` and `NotificationsReportGenerator` are thus potentially reusable. `GatewayNotificationFactory` could also use serialized input from the network.
 
-- To continue the work, implement the handle method in [NotificationHandlerService.php](https://github.com/cliq-bv/php-tech-assignment/blob/main/src/Services/NotificationHandlerService.php). The class constructor specifies the type of output file you need to generate (`CSV` or `TXT`).
+- For simplicity `XmlSerializer` contains a slim implementation that only handles the first level of tags in a nested XML file since all the necessary properties are in this first level.
 
-- Also, you can find the tests [here](https://github.com/cliq-bv/php-tech-assignment/tree/main/tests/Feature) to ensure the output results, but of course, they are broken. :nail_care:
+- Didn't get to write more tests for increased test coverage.
 
-## Cool, now some rules to make it more fun
-
-- You are not allowed to use any external libraries besides PHPUnit and the PHP-FIG (if you want) interfaces.
-- No databases (okay, only the required files).
-- No REST API structure.
-- External calls? Nope. =D
-
-## What we are looking for in this assignment
-
-- Project structure
-- PHP >= 8
-- Composer 2
-- OOP principles
-- Automated Tests
-- SOLID principles
-- KISS principle (Keep It Simple, Stupid)
-- Scalability
-  - Make it easy to implement more gateways
-  - Make it painless to add more output file formats
-- Reusability
-- Git skills
-- Documentation skills
-- And more! =)
-
-Extra points for:
-
-- Docker
-- CI/CD
-- TDD
-- Coverage >= 99%
-- Code smells tools
-
-## Tips!
-
-- Don’t overengineer your code.
-- Pay special attention to the S, O, and I principles from SOLID.
-- `composer test` might be useful
-
-## Deliverables
-
-- A Github `public` repo link, with a fully functional webhook handler that processes notifications from `NIRVANA`, `RHCP`, and `SOAD` gateways.
-- Implementation of the `handle` method in `NotificationHandlerService.php` to generate the specified output file.
-- Ensure all tests in the `tests/Feature` directory are passing and validate the output results.
-- A well-documented and structured project adhering to best practices (OOP, SOLID, KISS).
-- A README file detailing:
-  - Project setup instructions.
-  - Explanation of the solution and design decisions.
-  - How to run the tests and verify the implementation.
-- Optional: Docker setup, CI/CD pipeline, and additional points as mentioned in the "Extra points for" section.
-
-
-### Good Luck! 🍀
