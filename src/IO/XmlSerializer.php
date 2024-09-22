@@ -18,8 +18,10 @@ class XmlSerializer implements IDeserializer
 
         if (count($xml->children()) > 0) {
             foreach ($xml->children() as $node) {
-                if (!is_array($node)) {
-                    $result[$node->getName()] = ctype_digit($node->__toString()) ? intval($node->__toString()) : $node->__toString();
+                if (count($node->children()) == 0) {
+                    $result[$node->getName()] = ctype_digit($node->__toString())
+                        ? intval($node->__toString())
+                        : $node->__toString();
                 }
             }
         }

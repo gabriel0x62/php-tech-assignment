@@ -23,7 +23,7 @@ class NotificationsReportGenerator
         foreach ($notifications as $notification) {
             $rows[] = [
                 'date_time' => $notification->datetime->format('Y-m-d H:i:s'),
-                'status' => $notification->status,
+                'status' => $notification->status->value,
                 'total' => $notification->amount,
             ];
         }

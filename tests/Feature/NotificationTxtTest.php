@@ -13,7 +13,7 @@ class NotificationTxtTest extends TestCase
 
     function setUp(): void
     {
-        //(new NotificationHandlerService(OutputTypeEnum::TXT))->handle();
+        (new NotificationHandlerService(OutputTypeEnum::TXT))->handle();
     }
 
     public function test_txt_output_must_exit(): void
