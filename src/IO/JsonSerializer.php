@@ -8,6 +8,7 @@ use App\IO\Interfaces\IDeserializer;
 
 class JsonSerializer implements IDeserializer
 {
+    /** @return array<string, mixed> */
     public function deserialize(string $data): array
     {
         return json_decode($data, true);

@@ -19,6 +19,9 @@ class GatewayNotificationFactory
     ) {
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * */
     public function create(string $content, GatewayEnum $gateway): GatewayNotification
     {
         $data = $this->deseralizerFactory->getDeserializer($gateway->getDataType())->deserialize($content);

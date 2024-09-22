@@ -13,6 +13,9 @@ class CsvSerializer implements ISerializer
     ) {
     }
 
+    /**
+     * @param array<array<string, string>> $data
+     */
     public function serialize(array $data): string
     {
         //header

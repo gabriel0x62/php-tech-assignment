@@ -27,7 +27,10 @@ class NotificationHandlerService
         $notificationFactory = new GatewayNotificationFactory($serializerFactory);
         foreach (GatewayEnum::cases() as $gateway) {
             try {
-                $filePath = implode(DIRECTORY_SEPARATOR, [__DIR__, '..', '..', 'payment-notifications', $gateway->getFilename()]);
+                $filePath = implode(
+                    DIRECTORY_SEPARATOR,
+                    [__DIR__, '..', '..', 'payment-notifications', $gateway->getFilename()]
+                );
                 $fileContent = file_get_contents($filePath);
                 $notifications[] = $notificationFactory->create($fileContent, $gateway);
             } catch (Exception $e) {
@@ -39,7 +42,10 @@ class NotificationHandlerService
             $serializerFactory->getSerializer($this->outputType)
         ))->generateReportContent($notifications);
 
-        $filePath = implode(DIRECTORY_SEPARATOR, [__DIR__, '..', '..', 'public', "output.{$this->outputType->value}"]);
+        $filePath = implode(
+            DIRECTORY_SEPARATOR,
+            [__DIR__, '..', '..', 'public', "output.{$this->outputType->value}"]
+        );
         file_put_contents($filePath, $reportContent);
     }
 }

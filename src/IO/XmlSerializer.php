@@ -9,7 +9,12 @@ use SimpleXMLElement;
 
 class XmlSerializer implements IDeserializer
 {
-    /** @return array<string, mixed> */
+    /**
+     * For simplicity, the current implementation of the serializer only deserializes
+     * the first level of nodes.
+     *
+     *  @return array<string, mixed>
+     * */
     public function deserialize(string $data): array
     {
         $result = [];

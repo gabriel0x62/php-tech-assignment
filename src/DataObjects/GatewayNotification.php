@@ -7,6 +7,7 @@ namespace App\DataObjects;
 use App\DataObjects\Interfaces\IExternalNotification;
 use App\Enums\NotificationStatusEnum;
 use DateTimeImmutable;
+use InvalidArgumentException;
 
 abstract class GatewayNotification implements IExternalNotification
 {
@@ -26,10 +27,12 @@ abstract class GatewayNotification implements IExternalNotification
         $datetime = DateTimeImmutable::createFromFormat('Y-m-d\\TH:i:sp', $data[static::getFieldNameDateTime()]);
 
         if (!$datetime) {
-            throw new \InvalidArgumentException('DateTime is invalid');
+            throw new InvalidArgumentException('DateTime is invalid');
         }
 
-        $status = in_array($data[static::getFieldNameStatus()], ['succeeded', 'successful', 'completed']) ? NotificationStatusEnum::PAID : NotificationStatusEnum::UNKNOWN;
+        $status = in_array($data[static::getFieldNameStatus()], ['succeeded', 'successful', 'completed'])
+            ? NotificationStatusEnum::PAID
+            : NotificationStatusEnum::UNKNOWN;
 
         return new static(
             $datetime,

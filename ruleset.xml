@@ -16,7 +16,7 @@
   </rule>
   <rule ref="rulesets/cleancode.xml/StaticAccess" >
     <properties>
-        <property name="exceptions" value="\App\Enums\GatewayEnum" />
+        <property name="exceptions" value="\App\Enums\GatewayEnum,\DateTimeImmutable" />
     </properties>
   </rule>
   <rule ref="rulesets/controversial.xml" />
