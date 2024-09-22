@@ -24,7 +24,7 @@ class NotificationsReportGenerator
             $rows[] = [
                 'date_time' => $notification->datetime,
                 'status' => $notification->status,
-                'total' => $notification->total,
+                'total' => $notification->amount,
             ];
         }
 

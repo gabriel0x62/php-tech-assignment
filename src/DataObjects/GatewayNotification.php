@@ -10,7 +10,7 @@ abstract class GatewayNotification
     public function __construct(
         public readonly \DateTimeImmutable $datetime,
         public readonly string $status,
-        public readonly string $total
+        public readonly string $amount
     ) {
     }
 }
