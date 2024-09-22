@@ -12,6 +12,7 @@ use App\IO\CsvSerializer;
 use App\IO\Interfaces\IDeserializer;
 use App\IO\Interfaces\ISerializer;
 use App\IO\JsonSerializer;
+use App\IO\XmlSerializer;
 
 class SerializerFactory implements ISerializerFactory, IDeserializerFactory
 {
@@ -19,7 +20,7 @@ class SerializerFactory implements ISerializerFactory, IDeserializerFactory
     {
         return match ($type) {
             InputTypeEnum::JSON => new JsonSerializer(),
-            // TODO
+            InputTypeEnum::XML => new XmlSerializer(),
         };
     }
 
