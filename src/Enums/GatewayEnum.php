@@ -20,6 +20,6 @@ enum GatewayEnum: string
 
     public function getFilename(): string
     {
-        return "{$this->getFilename()}-gateway.{$this->getDataType()}";
+        return "{$this->value}-gateway.{$this->getDataType()->value}";
     }
 }

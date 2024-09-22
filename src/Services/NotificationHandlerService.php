@@ -28,10 +28,8 @@ class NotificationHandlerService
         foreach (GatewayEnum::cases() as $gateway) {
             try {
                 $filePath = realpath("../payment-notifications/{$gateway->getFilename()}");
-                if ($filePath) {
-                    $fileContent = file_get_contents($filePath);
-                    $notifications[] = $notificationFactory->create($fileContent, $gateway);
-                }
+                $fileContent = file_get_contents($filePath);
+                $notifications[] = $notificationFactory->create($fileContent, $gateway);
             } catch (Exception $e) {
                 // log
             }
@@ -40,8 +38,8 @@ class NotificationHandlerService
         $reportContent = (new NotificationsReportGenerator(
             $serializerFactory->getSerializer($this->outputType)
         ))->generateReportContent($notifications);
-        
-        $filePath = implode(DIRECTORY_SEPARATOR, ['.', "output.{$this->outputType}"]);
+
+        $filePath = implode(DIRECTORY_SEPARATOR, ['.', "output.{$this->outputType->value}"]);
         file_put_contents($filePath, $reportContent);
     }
 }
